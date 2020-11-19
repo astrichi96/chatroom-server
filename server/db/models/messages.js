@@ -2,7 +2,7 @@ const db = require('../config');
 const Schema = db.Schema;
 
 const MessageSchema = new Schema({
-  username: { type: String, required: true },
+  user: { type: Schema.Types.ObjectId, ref: 'user', index: true },
   text: { type: String, required: true },
   createdAt: {
     type: Date,

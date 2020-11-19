@@ -2,8 +2,8 @@ const { users: usersModel } = require('../../db/repository');
 
 const saveUser = async (req, res) => {
   try {
-    const { username, fullname } = req.body;
-    const user = await usersModel.save({ username, fullname });
+    const { username } = req.body;
+    const user = await usersModel.save({ username });
 
     return res.send(user);
   } catch (error) {
