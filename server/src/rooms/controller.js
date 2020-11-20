@@ -1,26 +1,27 @@
 const { rooms: roomsModel } = require('../../db/repository');
 
-const saveRoom = async (req, res) => {
+const saveRoom = async (req, res, next) => {
   try {
     const { name, description } = req.body;
-    const room = await roomsModel.save({ name, description });
 
+    if (!name) throw Error('Name property is required');
+
+    const room = await roomsModel.save({ name, description });
     return res.send(room);
   } catch (error) {
-    return res.status(500).send(error.message);
+    next(error);
   }
 };
 
-const findAll = async (req, res) => {
+const findAll = async (req, res, next) => {
   try {
     const { q } = req;
-    const rooms = await roomsModel.findAll();
+    const rooms = await roomsModel.findAll({ q });
 
     return res.send(rooms);
   } catch (error) {
-    return res.status(500).send(error.message);
+    next(error);
   }
 };
 
 module.exports = { saveRoom, findAll };
-// Add validations and handle errors and add search filters

@@ -3,7 +3,7 @@ const Schema = db.Schema;
 
 const RoomSchema = new Schema({
   name: { type: String, required: true, unique: true },
-  description: { type: String, required: true },
+  description: { type: String },
   createdAt: {
     type: Date,
     default: Date.now

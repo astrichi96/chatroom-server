@@ -1,8 +1,12 @@
 const MessageModel = require('../models/messages');
 
-const save = ({ text, user, room }) => MessageModel.create({ text, user });
+const save = ({ text, user, room }) =>
+  MessageModel.create({ text, user, room });
 
 const findAll = ({ room }) =>
-  MessageModel.find({}).populate('user').sort({ createdAt: -1 }).limit(50);
+  MessageModel.find({ room })
+    .populate('user')
+    .sort({ createdAt: -1 })
+    .limit(50);
 
 module.exports = { save, findAll };

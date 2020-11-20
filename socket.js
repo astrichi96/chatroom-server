@@ -6,16 +6,20 @@ const socketConnect = (app) => {
   const server = http.createServer(app);
   const io = socketIo(server);
 
-  io.on('connection', async function (socket) {
-    const messages = await messageModel.findAll({});
-
+  io.on('connection', function (socket) {
     console.log('users conected');
-    socket.emit('messages', messages);
+    socket.on('subscribe', function (room) {
+      socket.join(room);
+    });
 
     socket.on('new-message', async (message) => {
       await messageModel.save(message);
-      const messages = await messageModel.findAll({});
-      socket.emit('messages', messages);
+      const messages = await messageModel.findAll({ room: message.room });
+      io.in('5fb730acf95d2741ef11ebd8').emit(messages.reverse());
+    });
+
+    socket.on('disconnect', () => {
+      console.log('se desconecto');
     });
   });
   return server;

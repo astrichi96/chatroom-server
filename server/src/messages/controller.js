@@ -1,15 +1,13 @@
 const { messages: messagesModel } = require('../../db/repository');
 
-const getAll = async (req, res) => {
+const getAll = async (req, res, next) => {
   try {
-    const messages = await messagesModel.findAll({});
-
-    return res.send(messages);
+    const { room } = req.query;
+    const messages = await messagesModel.findAll({ room });
+    return res.send(messages.reverse());
   } catch (error) {
-    console.log({ error });
-    return res.status(500).send(error.message);
+    next(error);
   }
 };
 
 module.exports = { getAll };
-// Add validations and handle errors
