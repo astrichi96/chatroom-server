@@ -1,5 +1,8 @@
 const UserModel = require('../models/users');
 
-const save = ({ username }) => UserModel.create({ username });
+const save = ({ username, password }) =>
+  UserModel.create({ username, password });
 
-module.exports = { save };
+const findOne = ({ username }) => UserModel.findOne({ username });
+
+module.exports = { save, findOne };
