@@ -1,6 +1,7 @@
 const csvjson = require('csvjson');
 const bcrypt = require('bcrypt');
-const { SALT_ROUNDS } = process.env;
+var jwt = require('jsonwebtoken');
+const { saltRounds, jwtSecret } = require('./config');
 
 const createJson = (stream) =>
   csvjson.toObject(stream, { delimiter: ',', quote: '"' });
@@ -19,10 +20,15 @@ const BOT_MESSAGES = {
 };
 
 const encryptPassword = (password) =>
-  bcrypt.hashSync(password, bcrypt.genSaltSync(+SALT_ROUNDS));
+  bcrypt.hashSync(password, bcrypt.genSaltSync(+saltRounds));
 
 const validatePassWord = ({ passwordHash, password }) =>
   bcrypt.compareSync(password, passwordHash);
+
+const generateToken = (claims) =>
+  jwt.sign(claims, jwtSecret, { expiresIn: '1d' });
+
+const verifyToken = (token) => jwt.verify(token, jwtSecret);
 
 module.exports = {
   BOT_CODE,
@@ -30,5 +36,7 @@ module.exports = {
   BOT_MESSAGES,
   createJson,
   encryptPassword,
-  validatePassWord
+  validatePassWord,
+  generateToken,
+  verifyToken
 };

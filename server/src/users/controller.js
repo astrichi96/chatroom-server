@@ -9,7 +9,7 @@ const saveUser = async (req, res, next) => {
 
     const passwordHash = utils.encryptPassword(password);
     const user = await usersModel.save({ username, password: passwordHash });
-    return res.send(user);
+    return res.send(user.toAuthJSON());
   } catch (error) {
     next(error);
   }
@@ -26,7 +26,7 @@ const loginUser = async (req, res, next) => {
     if (!utils.validatePassWord({ passwordHash: user.password, password }))
       return res.status(401).send({ message: 'User invalid' });
 
-    return res.send(user);
+    return res.send(user.toAuthJSON());
   } catch (error) {
     next(error);
   }

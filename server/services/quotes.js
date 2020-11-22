@@ -1,9 +1,9 @@
 const axios = require('axios');
 const { createJson } = require('../../utils');
-const { QUOTE_URL = 'https://stooq.com/q/l?f=sd2t2ohlcv&h' } = process.env;
+const { quoteUrl } = require('../../config');
 
 const getQuote = async (stockCode) => {
-  const { data: stream } = await axios.get(QUOTE_URL, {
+  const { data: stream } = await axios.get(quoteUrl, {
     params: { s: stockCode, e: 'csv' }
   });
 

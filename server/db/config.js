@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const { MONGO_URI = 'mongodb://localhost:27017/messages' } = process.env;
+const { mongoURI } = require('../../config');
 
 mongoose
-  .connect(MONGO_URI, {
+  .connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })

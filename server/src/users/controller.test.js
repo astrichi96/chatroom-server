@@ -12,11 +12,11 @@ describe('User controller', () => {
       _id: '5fb6c7944e231d49c04689ab',
       username: '5',
       createdAt: '2020-11-19',
-      password: '$2b$10$IW/P/PZV32fsq.B9UaeWW.MZTsg2c4DQTWxfgNtpdkXc.aA5iqkfO'
+      password: '$2b$10$IW/P/PZV32fsq.B9UaeWW.MZTsg2c4DQTWxfgNtpdkXc.aA5iqkfO',
+      access_token:
+        '$2b$10$IW/P/PZV32fsq.B9UaeWW.MZTsg2c4DQTWxfgNtpdkXc.aA5iqkfO'
     },
-    password = '12345',
-    passwordHash =
-      '$2b$10$IW/P/PZV32fsq.B9UaeWW.MZTsg2c4DQTWxfgNtpdkXc.aA5iqkfO';
+    password = '12345';
 
   describe(`POST ${baseUrl} `, () => {
     let saveUserStub;
@@ -75,7 +75,7 @@ describe('User controller', () => {
 
     describe('When everything went smooth', () => {
       it('Should return a status 200 when the user was created successfully', async () => {
-        saveUserStub.returns(userSaved);
+        saveUserStub.returns({ toAuthJSON: () => userSaved });
         const res = await request(app)
           .post(baseUrl)
           .send({ username, password });
@@ -145,7 +145,7 @@ describe('User controller', () => {
       });
 
       it('Should return a status 401 when the password property is invalid', async () => {
-        findOne.returns(userSaved);
+        findOne.returns({ ...userSaved, toAuthJSON: () => userSaved });
         const res = await request(app)
           .post(`${baseUrl}/login`)
           .send({ username, password: '888888' });
@@ -158,7 +158,7 @@ describe('User controller', () => {
 
     describe('When everything went smooth', () => {
       it('Should return a status 200 when the user was created successfully', async () => {
-        findOne.returns(userSaved);
+        findOne.returns({ ...userSaved, toAuthJSON: () => userSaved });
         const res = await request(app)
           .post(`${baseUrl}/login`)
           .send({ username, password });

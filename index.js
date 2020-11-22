@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const { socketConnect } = require('./socket');
@@ -9,6 +10,7 @@ const messagesRoutes = require('./server/src/messages');
 const roomsRoutes = require('./server/src/rooms');
 
 const errorHandler = require('./server/middlewares/errorHandler');
+const { isAuthenticated } = require('./server/middlewares/auth');
 
 const port = process.env.PORT || 4000;
 
@@ -22,8 +24,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/users', usersRoutes);
-app.use('/messages', messagesRoutes);
-app.use('/rooms', roomsRoutes);
+app.use('/messages', isAuthenticated, messagesRoutes);
+app.use('/rooms', isAuthenticated, roomsRoutes);
 
 app.use(errorHandler);
 const socketServer = socketConnect(app);

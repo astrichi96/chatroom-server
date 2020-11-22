@@ -2,7 +2,7 @@ const axios = require('axios');
 const { stub } = require('sinon');
 const { getQuote } = require('./quotes');
 const { expect } = require('chai');
-const { QUOTE_URL = 'https://stooq.com/q/l?f=sd2t2ohlcv&h' } = process.env;
+const { quoteUrl } = require('../../config');
 
 describe('Quotes Service', () => {
   let getStub,
@@ -22,7 +22,7 @@ describe('Quotes Service', () => {
       });
       await getQuote(stockCode);
       expect(getStub.getCall(0).args).to.be.eql([
-        QUOTE_URL,
+        quoteUrl,
         { params: { s: stockCode, e: 'csv' } }
       ]);
     });
