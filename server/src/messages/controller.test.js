@@ -4,13 +4,11 @@ const { expect } = require('chai');
 const { stub, assert } = require('sinon');
 const db = require('../../db/config');
 const { messages: repository } = require('../../db/repository');
+const { generateToken } = require('../../../utils');
 
 describe('Message controller', () => {
-  const headers = {
-    Authorization: `bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImF2YW5lZ2FzIiwianRpIjoiZGIyYmUzNWYtYmQxNi00NmI3LWJkYzItNGM5MTIwOWMxNTVjIiwiaWF0IjoxNjA2MDE3NjkzLCJleHAiOjE2MDYwMjEyOTN9.Dp9yMLx-uP2k93GYPQhh2xPrZjhP0vHy2deq1OuMJ3A`
-  };
-
   const baseUrl = '/messages',
+    username = 'avanegas',
     room = '5fb594ac3b58cba87bbec72c';
   messages = [
     {
@@ -34,6 +32,10 @@ describe('Message controller', () => {
       createdAt: '2020-11-19'
     }
   ];
+
+  const headers = {
+    Authorization: `bearer ${generateToken({ username })}`
+  };
 
   describe(`GET ${baseUrl} `, () => {
     let findAllStub;

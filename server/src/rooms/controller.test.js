@@ -4,19 +4,21 @@ const { expect } = require('chai');
 const { stub, assert } = require('sinon');
 const db = require('../../db/config');
 const { rooms: repository } = require('../../db/repository');
+const { generateToken } = require('../../../utils');
 
 describe('Room controller', () => {
-  const headers = {
-    Authorization: `bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImF2YW5lZ2FzIiwianRpIjoiZGIyYmUzNWYtYmQxNi00NmI3LWJkYzItNGM5MTIwOWMxNTVjIiwiaWF0IjoxNjA2MDE3NjkzLCJleHAiOjE2MDYwMjEyOTN9.Dp9yMLx-uP2k93GYPQhh2xPrZjhP0vHy2deq1OuMJ3A`
-  };
-
   const baseUrl = '/rooms',
+    username = 'avanegas',
     name = 'GARDEN',
     q = 'GA',
     roomSaved = {
       _id: '5fb5721bda45b583e4e09097',
       name: 'GARDEN'
     };
+
+  const headers = {
+    Authorization: `bearer ${generateToken({ username })}`
+  };
 
   afterAll(async () => {
     await db.connection.close();
